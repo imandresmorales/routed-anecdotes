@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { Link, BrowserRouter as Router, Route, Routes, useParams } from 'react-router-dom'
+import { Link, BrowserRouter as Router, Route, Routes, useParams, useNavigate } from 'react-router-dom'
 
-const Menu = ({ anecdotes, addNew }) => {
+const Menu = ({ anecdotes, addNew, setNotification, notification }) => {
   const padding = {
     paddingRight: 5
   }
@@ -13,9 +13,9 @@ const Menu = ({ anecdotes, addNew }) => {
         <Link to='/about' style={padding}>about</Link>
 
         <Routes>
-          <Route path='/' element={<AnecdoteList anecdotes={anecdotes} />} />
+          <Route path='/' element={<AnecdoteList anecdotes={anecdotes} notification={notification} />} />
           <Route path='/anecdotes/:id' element={<Anecdote anecdotes={anecdotes} />} />
-          <Route path='/create' element={<CreateNew addNew={addNew} />} />
+          <Route path='/create' element={<CreateNew addNew={addNew} setNotification={setNotification} />} />
           <Route path='/about' element={<About />} />
         </Routes>
       </Router>
@@ -39,8 +39,15 @@ const Anecdote = ({ anecdotes }) => {
   )
 }
 
-const AnecdoteList = ({ anecdotes }) => (
+const Notification = ({ notification }) => {
+  return (
+    <span>{notification}</span>
+  )
+}
+
+const AnecdoteList = ({ anecdotes, notification }) => (
   < div >
+    <Notification notification={notification} />
     <h2>Anecdotes</h2>
     <ul>
       {anecdotes.map(anecdote =>
@@ -76,11 +83,14 @@ const Footer = () => (
   </div>
 )
 
+
 const CreateNew = (props) => {
+  // console.log(props)
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
 
+  const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -90,6 +100,11 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+    navigate('/')
+    props.setNotification(`a new anecdote ${content} created!`)
+    setTimeout(() => {
+      props.setNotification('')
+    }, 5000);
   }
 
   return (
@@ -157,7 +172,7 @@ const App = () => {
   return (
     <div>
       <h1>Software anecdotes</h1>
-      <Menu anecdotes={anecdotes} addNew={addNew} />
+      <Menu anecdotes={anecdotes} addNew={addNew} setNotification={setNotification} notification={notification} />
       <Footer />
     </div>
   )
