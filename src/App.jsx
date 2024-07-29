@@ -91,8 +91,10 @@ const CreateNew = (props) => {
   const content = useField('content')
   const author = useField('author')
   const info = useField('info')
+  const reset = useField('reset')
 
   const handleSubmit = (e) => {
+    console.log('rueba')
     e.preventDefault()
     props.addNew({
       content: content.value,
@@ -105,6 +107,12 @@ const CreateNew = (props) => {
     setTimeout(() => {
       props.setNotification('')
     }, 5000);
+  }
+
+  const eliminar = () => {
+    content.reset()
+    author.reset()
+    info.reset()
   }
 
   return (
@@ -125,9 +133,10 @@ const CreateNew = (props) => {
         </div>
         <button>create</button>
       </form>
-    </div>
-  )
+      <button type={reset.type} value={reset.value} onClick={eliminar} >reset</button>
 
+    </div >
+  )
 }
 
 const App = () => {
