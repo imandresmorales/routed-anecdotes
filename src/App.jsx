@@ -129,7 +129,7 @@ const CreateNew = (props) => {
         </div>
         <div>
           url for more info
-          <input {...info} />
+          <input type={info.type} value={info.value} onChange={info.onChange} />
         </div>
         <button>create</button>
       </form>
