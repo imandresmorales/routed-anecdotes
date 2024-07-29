@@ -88,10 +88,9 @@ const Footer = () => (
 const CreateNew = (props) => {
   const navigate = useNavigate()
 
-  const content = useField('content')
-  const author = useField('author')
-  const info = useField('info')
-  const reset = useField('reset')
+  const { reset: resetContent, ...content } = useField('content')
+  const { reset: resetAuthor, ...author } = useField('author')
+  const { reset: resetInfo, ...info } = useField('info')
 
   const handleSubmit = (e) => {
     console.log('rueba')
@@ -110,9 +109,10 @@ const CreateNew = (props) => {
   }
 
   const eliminar = () => {
-    content.reset()
-    author.reset()
-    info.reset()
+    const event = { target: { value: '' } }
+    content.onChange(event)
+    author.onChange(event)
+    info.onChange(event)
   }
 
   return (
@@ -121,20 +121,19 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input type={content.type} value={content.value} onChange={content.onChange} />
+          <input {...content} />
         </div>
         <div>
           author
-          <input type={author.type} value={author.value} onChange={author.onChange} />
+          <input {...author} />
         </div>
         <div>
           url for more info
-          <input type={info.type} value={info.value} onChange={info.onChange} />
+          <input {...info} />
         </div>
         <button>create</button>
       </form>
-      <button type={reset.type} value={reset.value} onClick={eliminar} >reset</button>
-
+      <button onClick={eliminar} >reset</button>
     </div >
   )
 }
